@@ -14,11 +14,18 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN cp .env.example .env
 
-RUN mkdir -p storage/framework/{cache,sessions,views} \
-    && mkdir -p bootstrap/cache \
-    && chmod -R 777 storage bootstrap/cache
+RUN mkdir -p storage/framework/cache
+RUN mkdir -p storage/framework/sessions
+RUN mkdir -p storage/framework/views
+RUN mkdir -p storage/logs
+RUN mkdir -p bootstrap/cache
+
+RUN chmod -R 777 storage bootstrap/cache
 
 RUN php artisan key:generate
+RUN php artisan config:clear
+RUN php artisan cache:clear
+RUN php artisan view:clear
 
 RUN npm install
 RUN npm run build
